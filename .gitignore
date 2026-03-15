@@ -19,3 +19,7 @@ __pycache__/
 
 # n8n workflow list cache (regenerated on export)
 workflows/latest/workflows.list.json
+
+# Tool caches
+.playwright-mcp/
+.tmp_workflows/
