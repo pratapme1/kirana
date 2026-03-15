@@ -1,0 +1,21 @@
+# Credentials
+.env
+
+# Playwright / browser session cache
+tmp/
+
+# Test artifacts
+reports/
+
+# Debug screenshots
+*.png
+
+# Node
+node_modules/
+
+# Python bytecode
+__pycache__/
+*.pyc
+
+# n8n workflow list cache (regenerated on export)
+workflows/latest/workflows.list.json

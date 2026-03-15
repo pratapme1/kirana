@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Owner Bulk Import Invoice Fixture</title>
+  <style>
+    :root {
+      --desk: #6c4b3b;
+      --desk-dark: #4b3328;
+      --paper: #efe7d8;
+      --ink: #423327;
+      --muted: #66584d;
+      --line: #b9a995;
+      --accent: #7e5d45;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      width: 1024px;
+      height: 1536px;
+      font-family: Georgia, "Times New Roman", serif;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.02)),
+        repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 0 4px, rgba(0,0,0,0.02) 4px 9px),
+        linear-gradient(135deg, var(--desk), var(--desk-dark));
+      color: var(--ink);
+      overflow: hidden;
+    }
+    .desk-item {
+      position: absolute;
+      opacity: 0.9;
+      color: #d8c7b2;
+      font-size: 36px;
+    }
+    .fruit { top: 36px; left: 36px; }
+    .twine { top: 56px; right: 80px; font-size: 44px; }
+    .leaf { top: 180px; right: 34px; font-size: 40px; writing-mode: vertical-rl; }
+    .clip-top { top: 342px; left: 24px; transform: rotate(-10deg); }
+    .clip-bottom { left: 28px; bottom: 36px; transform: rotate(12deg); }
+    .pen { left: 26px; bottom: 248px; font-size: 54px; transform: rotate(10deg); }
+    .cloth { right: 20px; bottom: 12px; width: 180px; height: 140px; background: rgba(255,255,255,0.16); transform: skew(-12deg) rotate(6deg); border-radius: 8px; }
+    .page {
+      position: absolute;
+      inset: 110px 88px 90px 88px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.24), rgba(0,0,0,0.03)),
+        radial-gradient(circle at top left, rgba(255,255,255,0.2), transparent 38%),
+        var(--paper);
+      box-shadow: 0 18px 44px rgba(0, 0, 0, 0.28);
+      border: 1px solid rgba(103, 79, 62, 0.3);
+      padding: 42px 44px 38px;
+    }
+    .header {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 24px;
+      align-items: start;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 18px;
+      margin-bottom: 18px;
+    }
+    .brand {
+      display: grid;
+      gap: 6px;
+    }
+    .logo {
+      display: inline-grid;
+      gap: 4px;
+      justify-items: center;
+      width: max-content;
+      color: #6f4e39;
+    }
+    .logo .icon {
+      font-size: 34px;
+      letter-spacing: 6px;
+    }
+    .logo .name {
+      font-size: 24px;
+      font-weight: 700;
+      border-top: 2px solid var(--accent);
+      padding-top: 4px;
+      letter-spacing: 0.6px;
+    }
+    .small {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+    .invoice-meta {
+      text-align: right;
+    }
+    .invoice-meta h1 {
+      margin: 0 0 20px;
+      font-size: 34px;
+      letter-spacing: 0.8px;
+    }
+    .meta-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 18px;
+      justify-items: end;
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+    .party-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 18px;
+    }
+    .party h2 {
+      margin: 0 0 10px;
+      font-size: 22px;
+    }
+    .party p {
+      margin: 3px 0;
+      font-size: 16px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 15px;
+      margin-bottom: 18px;
+    }
+    thead th {
+      text-align: left;
+      padding: 8px 8px 7px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+      letter-spacing: 0.2px;
+    }
+    tbody td {
+      padding: 7px 8px;
+      border-bottom: 1px solid rgba(185, 169, 149, 0.55);
+    }
+    td.num, th.num { text-align: right; }
+    .totals {
+      display: grid;
+      justify-content: end;
+      margin-bottom: 14px;
+    }
+    .totals table {
+      width: 320px;
+      font-size: 16px;
+      margin-bottom: 0;
+    }
+    .totals td {
+      padding: 6px 0 6px 16px;
+      border: 0;
+    }
+    .totals tr.total td {
+      font-size: 18px;
+      font-weight: 700;
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+    }
+    .bottom {
+      display: grid;
+      grid-template-columns: 1.2fr 0.9fr;
+      gap: 30px;
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+    }
+    .section h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+    .section p,
+    .section li {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+    .bank-box {
+      border-left: 1px solid var(--line);
+      padding-left: 20px;
+    }
+    .thanks {
+      text-align: center;
+      margin-top: 22px;
+      font-size: 17px;
+      font-weight: 700;
+      color: #5c4434;
+    }
+  </style>
+</head>
+<body>
+  <div class="desk-item fruit">🥔 🍍</div>
+  <div class="desk-item twine">🧵</div>
+  <div class="desk-item leaf">🌿 🌿 🌿</div>
+  <div class="desk-item clip-top">📎</div>
+  <div class="desk-item pen">🖊</div>
+  <div class="desk-item clip-bottom">📎</div>
+  <div class="cloth"></div>
+
+  <main class="page">
+    <section class="header">
+      <div class="brand">
+        <div class="logo">
+          <div class="icon">🍍🍈🍌</div>
+          <div class="name">EXOTIC IMPORTS</div>
+        </div>
+        <div class="small">1234 Rare Delicacies Lane, Suite 202<br>Strangeville, WI 53001, USA</div>
+      </div>
+      <div class="invoice-meta">
+        <h1>INVOICE</h1>
+        <div class="meta-row"><span>Invoice No:</span><strong>INV-04165</strong></div>
+        <div class="meta-row"><span>Invoice Date:</span><strong>04/24/2024</strong></div>
+        <div class="meta-row"><span>Due Date:</span><strong>05/01/2024</strong></div>
+      </div>
+    </section>
+
+    <section class="party-grid">
+      <div class="party">
+        <h2>Exotic Foods Store</h2>
+        <p>5678 Unique Treats Ave</p>
+        <p>Food City, USA</p>
+        <p>Phone: (555) 789-1234</p>
+        <p>Website: www.exoticimports.com</p>
+        <p>Email: sales@exoticimports.com</p>
+      </div>
+      <div class="party">
+        <h2>Invoice To:</h2>
+        <p>Exotic Foods Store</p>
+        <p>5678 Unique Treats Ave</p>
+        <p>Food City, USA</p>
+      </div>
+    </section>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Item ID</th>
+          <th>Description</th>
+          <th class="num">Unit Price</th>
+          <th class="num">Qty</th>
+          <th class="num">Line Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>RG028</td><td>Surstromming</td><td class="num">$950.00</td><td class="num">5</td><td class="num">$4,750.00</td></tr>
+        <tr><td>RG029</td><td>Escargots in Garlic Butter</td><td class="num">$780.00</td><td class="num">5</td><td class="num">$3,900.00</td></tr>
+        <tr><td>RG030</td><td>Haggis Tinned</td><td class="num">$560.00</td><td class="num">6</td><td class="num">$3,360.00</td></tr>
+        <tr><td>RG025</td><td>Natto</td><td class="num">$175.00</td><td class="num">10</td><td class="num">$1,750.00</td></tr>
+        <tr><td>RG001</td><td>Duck Eggs</td><td class="num">$180.00</td><td class="num">6</td><td class="num">$1,080.00</td></tr>
+        <tr><td>RG018</td><td>Durian Juice</td><td class="num">$180.00</td><td class="num">6</td><td class="num">$1,080.00</td></tr>
+        <tr><td>RG022</td><td>Cuttlefish Ink</td><td class="num">$340.00</td><td class="num">3</td><td class="num">$1,020.00</td></tr>
+        <tr><td>RG015</td><td>Durian Candy</td><td class="num">$240.00</td><td class="num">4</td><td class="num">$960.00</td></tr>
+        <tr><td>RG004</td><td>Yak Cheese</td><td class="num">$450.00</td><td class="num">2</td><td class="num">$900.00</td></tr>
+        <tr><td>RG016</td><td>Kimchi Chips</td><td class="num">$110.00</td><td class="num">8</td><td class="num">$900.00</td></tr>
+      </tbody>
+    </table>
+
+    <section class="totals">
+      <table>
+        <tr><td>Subtotal</td><td class="num">$19,680.00</td></tr>
+        <tr><td>Tax (8%)</td><td class="num">$1,574.40</td></tr>
+        <tr><td>Shipping</td><td class="num">$150.00</td></tr>
+        <tr class="total"><td>Total</td><td class="num">$21,404.40</td></tr>
+      </table>
+    </section>
+
+    <section class="bottom">
+      <div class="section">
+        <h3>Notes:</h3>
+        <p>Please make payment within 7 days to avoid late fees.</p>
+        <h3>Payment Methods:</h3>
+        <ul>
+          <li>Bank Transfer to Account: Exotic Imports Global Trade Bank</li>
+          <li>Routing: 123456789</li>
+          <li>Account No: 9876343210</li>
+        </ul>
+      </div>
+      <div class="section bank-box">
+        <h3>Bank Transfer</h3>
+        <p>STE<br>Exotic Imports</p>
+        <h3>Check</h3>
+        <p>Exotic Imports<br>234 Rare Delicacies Lane<br>Suite 202; Strangeville, WI 53001</p>
+      </div>
+    </section>
+
+    <div class="thanks">Thank you for your business!</div>
+  </main>
+</body>
+</html>
