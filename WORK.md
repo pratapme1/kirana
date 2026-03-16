@@ -117,28 +117,33 @@ These are in n8n but serve no purpose. Should be deleted.
 
 ## Pending Work
 
-### P1 — n8n Cleanup (delete junk workflows)
-Delete the 11 junk workflows listed above from n8n and from `workflows/latest/`.
-This reduces noise when reading the codebase.
+### ~~P1 — n8n Cleanup~~ DONE (2026-03-15)
+All 11 junk workflows were already deleted from n8n. Removed 2 orphan archived JSON files
+(`gI5pMjWPx8w02RUX` Razorpay listener, `NhLM82oFlVc5Gluy` Telegram owner callback) from repo.
+n8n instance is clean: 35 active workflows, all accounted for.
 
-### P2 — Mock Test Webhook
-Build `[Test] Kirana Mock Webhook` — 16 test scenarios covering the full customer journey.
-Scenarios: Hindi add, typo search, multi-item, confirm flow, cancel flow, cart view,
-track order, duplicate dedup, non-text message, empty checkout, address detection, browse, language switch, owner text command, owner button, feedback.
+### ~~P2 — Mock Test Webhook~~ DONE (2026-03-15)
+`[Test] Kirana Mock Webhook` (gygRnCmBCer86cXH) — 8 scenarios, all passing.
+Trigger: GET https://primary-production-87e8.up.railway.app/webhook/kirana-test-runner
+Tests: view_cart_empty, add_items_found, add_items_notfound, browse_home, browse_search,
+track_no_orders, lang_select_hindi, cancel_no_order. Results sent to owner WhatsApp.
 
-### P3 — Verify Browse Catalog end-to-end
-`Xu9ngaO9mBg1sEIC` exists (6 nodes) but has never been smoke-tested against live DB.
-- [ ] "browse" → home categories display
-- [ ] tap category → item list with [Add] buttons
-- [ ] tap item → quantity picker
-- [ ] "search milk" → search results
+### ~~P3 — Verify Browse Catalog end-to-end~~ DONE (2026-03-15)
+All 4 browse steps verified against live DB via test runner (10/10 passed):
+- browse_home → categories ✅
+- browse_category (dairy) → item list ✅
+- browse_search (milk) → results ✅
+- browse_item (MILK-500) → quantity picker with buttons ✅
 
-### P4 — Verify Order Feedback end-to-end
-`w5D4XMey0WjTcJtp` exists (15 nodes). Check it fires after order delivery and owner alert works.
+### ~~P4 — Verify Order Feedback end-to-end~~ DONE (2026-03-15)
+All 4 feedback actions verified via test runner (14/14 passed):
+- feedback_good → positive confirmation ✅
+- feedback_issue_start → issue type picker ✅
+- feedback_issue_type → detail prompt ✅
+- feedback_issue_text → confirmation + owner alert ✅
 
-### P5 — Owner upi_id (manual DB step)
-`UPDATE stores SET upi_id = 'owner@upi' WHERE store_id = 1;`
-Currently null → Place Order generates bill without UPI link.
+### ~~P5 — Owner upi_id~~ DONE
+Already set via onboarding: `upi_id = "Upi@upi"`, store_id=17, onboarding_step=6.
 
 ---
 

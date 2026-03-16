@@ -129,8 +129,19 @@ cmd_push_file() {
 
   echo "Pushing ${fname} → n8n workflow ${id}..."
 
+  # Strip server-generated fields — n8n PUT only accepts name/nodes/connections/settings
+  # Also strip invalid settings properties (binaryMode) rejected by the API
   local body
-  body="$(cat "$file")"
+  body="$(python3 -c "
+import json, sys
+INVALID_SETTINGS = {'binaryMode'}
+with open('$file') as f:
+    wf = json.load(f)
+out = {k: wf[k] for k in ('name','nodes','connections','settings') if k in wf}
+if 'settings' in out:
+    out['settings'] = {k: v for k, v in out['settings'].items() if k not in INVALID_SETTINGS}
+sys.stdout.write(json.dumps(out))
+")"
 
   local response http_code
   http_code="$(curl -sS -o /tmp/n8n_push_response.json -w "%{http_code}" \
